@@ -1,0 +1,26 @@
+---
+title: "CR-V Analysis"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(DT)
+library(tidyverse)
+```
+
+
+```{r }
+df <- read_csv("data/crv_analysis.csv") %>% 
+  dplyr::mutate(pred = round(pred, 0))
+
+DT::datatable(df)
+```
+
+```{r}
+ggplot(df, aes(mileage, pred))+
+  geom_col()+
+  facet_wrap(~trim_name,nrow = 2 )+
+  theme_minimal()
+```
+
