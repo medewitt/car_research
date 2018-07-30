@@ -2,7 +2,9 @@
 title: "CR-V Analysis"
 ---
 
-```{r setup, include=FALSE}
+This is based off of some analysis I did last year. Should pretty much be the same. I added a 2% inflation factor to account for some differences.
+
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 library(DT)
@@ -10,17 +12,21 @@ library(tidyverse)
 ```
 
 
-```{r }
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 df <- read_csv("data/crv_analysis.csv") %>% 
-  dplyr::mutate(pred = round(pred, 0))
+  dplyr::mutate(pred = round(pred, 0)) %>% 
+  dplyr::mutate(inflation_adjusted = pred*1.02)
 
 DT::datatable(df)
 ```
 
-```{r}
-ggplot(df, aes(mileage, pred))+
+```{r fig.height=8, echo=FALSE}
+ggplot(df, aes(mileage, pred/1000))+
   geom_col()+
   facet_wrap(~trim_name,nrow = 2 )+
-  theme_minimal()
+  geom_line(aes(mileage, inflation_adjusted/1000))+
+  theme_minimal()+
+  theme(strip.background = element_rect(fill = "#F0F0F0"),
+        strip.text = element_text(size = 12))
 ```
 
